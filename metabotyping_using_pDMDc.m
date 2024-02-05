@@ -12,31 +12,12 @@
 % Work address: 
 % email: viktor.skantze@fcc.chalmers.se
 %------------- BEGIN CODE --------------
-%% Load data
-clc; clear all;close all
-addpath("Functions")
-load("Data\data_unhealthy_healthy_100_diets_200_individuals.mat")
-data_metabolomics = data_save{1};
-
-idx_remove = isnan(std(data_metabolomics,[],[1 2 3 ])) | (std(data_metabolomics,[],[1 2 3 ]) == 0);
-data_metabolomics = data_metabolomics(:,:,:,~idx_remove);
-ind_remove = (std(data_metabolomics, [], [1 3 4]) == 0);
-data_metabolomics = data_metabolomics(:,~ind_remove,:,:);
-data_metabolomics = permute(data_metabolomics, [1 4 3 2]);
-cluster_ground_truth = [repmat("healthy",100,1); repmat("diabetic",100,1)];
-cluster_ground_truth = cluster_ground_truth(~ind_remove);
-
-input_meal_all =  data_save{2};
-size(data_metabolomics)                                                    % 3 diets, 79 metabolites, 8 time points, 17 individuals
-size(input_meal_all)                                                       % 3 macronutrients(fat, protein, carbohydrates) for 100 diets
-%% Choose number of diets
-nr_diets = 3;                                                            % Chosen number of diets to include in analysis
-% nr_time = size(data_metabolomics,3);
-% new_sampling = unique(round(logspace(0,log10(nr_time),10)));
-% length(new_sampling)
-% data_metabolomics = data_metabolomics(:,:,new_sampling,:);
-data_metabolomics = data_metabolomics(1:nr_diets,:,:,:);                   % Subsetting data
-input_meal_all = input_meal_all(:,1:nr_diets);                             % Subsetting data
+clc; clear all
+load("Data\data_3_diets.mat")
+data_metabolomics = data_collection{1};
+input_meal_all =  data_collection{2};
+cluster_ground_truth = data_collection{3};
+metabolite_list = data_collection{4};
 %% Choosing model complexity
 data = permute(data_metabolomics, [4 3 2 1]);
 nr_diets = size(data,4);
@@ -90,9 +71,9 @@ PlotClustering(cluster_ground_truth, ...
     diet_of_interest, ...
     denom)
 %% Plot metabolites 
-metabolite_list = struct2cell(load("Data\metabolite_names.mat"));
-metabolite_list = metabolite_list{1};
-metabolite_list = metabolite_list(~idx_remove);
+% metabolite_list = struct2cell(load("Data\metabolite_names.mat"));
+% metabolite_list = metabolite_list{1};
+% metabolite_list = metabolite_list(~idx_remove);
 classification_description_metabolites = {'Component 1','Component 2','Component 3','Component 4'};
 PlotMetaboliteLoadings(metabolite_list, U,data_metabolomics_dmd, ...
     model_parafac{2},[],classification_description_metabolites, ...
