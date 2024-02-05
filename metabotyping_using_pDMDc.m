@@ -6,7 +6,7 @@
 % Other m-files required: The Nway package by Rasmus Bro, pDMDcMetabotyping.m & ClusteringFunction.m
 % Nway can be installed from https://se.mathworks.com/matlabcentral/fileexchange/1088-the-n-way-toolbox
 % Subfunctions: none
-% MAT-files required: "100_diets_simulated_from_herring.mat"
+% MAT-files required: "data_3_diets.mat.mat"
 %
 % Author: Viktor Skantze
 % Work address: 
